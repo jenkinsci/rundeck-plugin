@@ -99,13 +99,13 @@ public class RundeckInstance implements Serializable {
 
     /**
      * Get the details of a job, identified by the given id.
-     * 
+     *
      * @param jobId - mandatory
      * @return a {@link RundeckJob} instance (won't be null), with details on the job
      * @throws RundeckApiException in case of error calling the API
      * @throws RundeckApiLoginException if the login failed
      */
-    public RundeckJob getJob(Long jobId) throws RundeckApiException, RundeckApiLoginException {
+    public RundeckJob getJob(String jobId) throws RundeckApiException, RundeckApiLoginException {
         if (jobId == null) {
             throw new IllegalArgumentException("jobId is mandatory to get the details of a job !");
         }
@@ -193,7 +193,7 @@ public class RundeckInstance implements Serializable {
 
     /**
      * Run a job, identified by the given id.
-     * 
+     *
      * @param jobId - mandatory
      * @param options for the job, optional
      * @return a {@link RundeckExecution} instance (won't be null), with details on the execution
@@ -201,7 +201,7 @@ public class RundeckInstance implements Serializable {
      * @throws RundeckApiJobRunException if the run failed
      * @throws RundeckApiException in case of error calling the API
      */
-    public RundeckExecution runJob(Long jobId, Properties options) throws RundeckApiException,
+    public RundeckExecution runJob(String jobId, Properties options) throws RundeckApiException,
             RundeckApiLoginException, RundeckApiJobRunException {
         if (jobId == null) {
             throw new IllegalArgumentException("jobId is mandatory to run a job !");

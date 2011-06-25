@@ -25,7 +25,7 @@ public class RundeckInstanceTest extends TestCase {
         rundeck = new RundeckInstance(rundeck.getUrl(), "invalid", "invalidToo");
         if (rundeck.isAlive()) {
             try {
-                rundeck.runJob(1L, null);
+                rundeck.runJob("1", null);
                 fail("login for an invalid user should have failed !");
             } catch (RundeckApiLoginException e) {
                 assertNull("Login failure for invalid user should not have a cause ! cause : " + e.getCause(),
@@ -39,7 +39,7 @@ public class RundeckInstanceTest extends TestCase {
     public void testInvalidJob() throws Exception {
         if (rundeck.isAlive()) {
             try {
-                rundeck.runJob(4242424242L, null);
+                rundeck.runJob("4242424242", null);
                 fail("running an invalid job should have failed !");
             } catch (RundeckApiJobRunException e) {
                 assertNull("failure when running an invalid job should not have a cause ! cause : " + e.getCause(),
@@ -55,7 +55,7 @@ public class RundeckInstanceTest extends TestCase {
             Properties options = new Properties();
             options.setProperty("command", "ls");
             options.setProperty("dir", "/tmp");
-            RundeckExecution execution = rundeck.runJob(1l, options);
+            RundeckExecution execution = rundeck.runJob("1", options);
             assertEquals(rundeck.getLogin(), execution.getStartedBy());
         } else {
             System.out.println("No live RunDeck instance at " + rundeck.getUrl() + " - doing nothing...");

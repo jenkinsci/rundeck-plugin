@@ -42,7 +42,7 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 public class RundeckNotifier extends Notifier {
 
-    private final Long jobId;
+    private final String jobId;
 
     private final String options;
 
@@ -53,7 +53,7 @@ public class RundeckNotifier extends Notifier {
     private final Boolean shouldFailTheBuild;
 
     @DataBoundConstructor
-    public RundeckNotifier(Long jobId, String options, String tag, Boolean shouldWaitForRundeckJob,
+    public RundeckNotifier(String jobId, String options, String tag, Boolean shouldWaitForRundeckJob,
             Boolean shouldFailTheBuild) {
         this.jobId = jobId;
         this.options = options;
@@ -240,7 +240,7 @@ public class RundeckNotifier extends Notifier {
         return BuildStepMonitor.NONE;
     }
 
-    public Long getJobId() {
+    public String getJobId() {
         return jobId;
     }
 
@@ -287,7 +287,7 @@ public class RundeckNotifier extends Notifier {
 
         @Override
         public Publisher newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-            return new RundeckNotifier(formData.getLong("jobId"),
+            return new RundeckNotifier(formData.getString("jobId"),
                                        formData.getString("options"),
                                        formData.getString("tag"),
                                        formData.getBoolean("shouldWaitForRundeckJob"),
@@ -310,7 +310,7 @@ public class RundeckNotifier extends Notifier {
             return FormValidation.ok("Your RunDeck instance is alive, and your credentials are valid !");
         }
 
-        public FormValidation doCheckJob(@QueryParameter("jobId") final Long jobId) {
+        public FormValidation doCheckJob(@QueryParameter("jobId") final String jobId) {
             try {
                 RundeckJob job = rundeckInstance.getJob(jobId);
                 return FormValidation.ok("Your RunDeck job is : %s (project: %s)", job.getFullName(), job.getProject());

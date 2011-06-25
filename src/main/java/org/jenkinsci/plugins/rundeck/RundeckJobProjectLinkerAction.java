@@ -28,7 +28,7 @@ public class RundeckJobProjectLinkerAction implements Action {
      * @param rundeckJobId ID of the RunDeck job
      * @throws RundeckApiException in case of error while load the job details from RunDeck API
      */
-    public RundeckJobProjectLinkerAction(RundeckInstance rundeck, Long rundeckJobId) throws RundeckApiException {
+    public RundeckJobProjectLinkerAction(RundeckInstance rundeck, String rundeckJobId) throws RundeckApiException {
         this.rundeck = rundeck;
         this.rundeckJob = rundeck.getJob(rundeckJobId);
         this.rundeckJobUrl = buildRundeckJobUrl();

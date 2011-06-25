@@ -79,7 +79,7 @@ public class RundeckUtils {
         Node jobNode = document.selectSingleNode("joblist/job");
 
         RundeckJob job = new RundeckJob();
-        job.setId(Long.valueOf(jobNode.valueOf("id")));
+        job.setId(jobNode.valueOf("id"));
         job.setName(jobNode.valueOf("name"));
         job.setDescription(jobNode.valueOf("description"));
         job.setGroup(jobNode.valueOf("group"));
@@ -130,7 +130,7 @@ public class RundeckUtils {
         Node jobNode = execNode.selectSingleNode("job");
         if (jobNode != null) {
             RundeckJob job = new RundeckJob();
-            job.setId(Long.valueOf(jobNode.valueOf("@id")));
+            job.setId(jobNode.valueOf("@id"));
             job.setName(jobNode.valueOf("name"));
             job.setGroup(StringUtils.trimToNull(jobNode.valueOf("group")));
             job.setProject(jobNode.valueOf("project"));

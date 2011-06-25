@@ -32,7 +32,7 @@ public class RundeckUtilsTest extends TestCase {
         InputStream input = getClass().getResourceAsStream("job-definition.xml");
         RundeckJob job = RundeckUtils.parseJobDefinition(input);
 
-        assertEquals(new Long(1), job.getId());
+        assertEquals("1", job.getId());
         assertEquals("job-name", job.getName());
         assertEquals("job description", job.getDescription());
         assertEquals("group-name", job.getGroup());
@@ -64,7 +64,7 @@ public class RundeckUtilsTest extends TestCase {
         assertEquals(null, execution.getEndedAt());
         assertEquals("ls ${option.dir}", execution.getDescription());
 
-        assertEquals(new Long(1), job.getId());
+        assertEquals("1", job.getId());
         assertEquals("ls", job.getName());
         assertEquals("test", job.getGroup());
         assertEquals("test", job.getProject());

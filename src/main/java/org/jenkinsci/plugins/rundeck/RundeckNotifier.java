@@ -329,7 +329,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
         PrintStream printStream = listener.getLogger();
         for (List<RundeckOutputEntry> aRunDeckLogTail : runDeckLogTail) {
             for (RundeckOutputEntry rundeckOutputEntry : aRunDeckLogTail) {
-                printStream.println("[" + rundeckOutputEntry.getTime() + "] [" + rundeckOutputEntry.getLevel() + "] " + rundeckOutputEntry.getMessage());
+                printStream.println("["+ rundeckOutputEntry.getNode() + "] " + "[" + rundeckOutputEntry.getTime() + "] [" + rundeckOutputEntry.getLevel() + "] " + rundeckOutputEntry.getMessage());
 //                printStream.println(rundeckOutputEntry);
 //                        String.format("[%s] [%s] %s",
 //                        new Object[]{ rundeckOutputEntry.getTime(), rundeckOutputEntry.getLevel(), rundeckOutputEntry.getMessage() }));
@@ -421,7 +421,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
             List<RundeckOutputEntry> logEntries = rundeckOutput.getLogEntries();
             if (null != logEntries) {
                 for (RundeckOutputEntry rundeckOutputEntry : logEntries) {
-                    listener.getLogger().println(rundeckOutputEntry.getMessage());
+                    listener.getLogger().println("["+ rundeckOutputEntry.getNode() + "] " + "[" + rundeckOutputEntry.getTime() + "] [" + rundeckOutputEntry.getLevel() + "] " + rundeckOutputEntry.getMessage());
                 }
             }
         }

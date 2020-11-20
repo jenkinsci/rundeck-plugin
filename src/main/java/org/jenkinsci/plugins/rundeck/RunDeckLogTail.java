@@ -1,5 +1,7 @@
 package org.jenkinsci.plugins.rundeck;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.NoSuchElementException;
 import org.rundeck.api.RundeckApiException;
 import org.rundeck.api.RundeckClient;
 import org.rundeck.api.domain.RundeckOutput;
@@ -203,6 +205,7 @@ public class RunDeckLogTail implements Iterable<List<RundeckOutputEntry>> {
         /**
          * Returns the resultset which has been fetched using the hasNext method.
          */
+        @SuppressFBWarnings(value = "IT_NO_SUCH_ELEMENT", justification = "weird design, needs reworking to fix")
         public List<RundeckOutputEntry> next() {
             return next;
         }

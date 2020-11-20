@@ -12,7 +12,6 @@ import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.rundeck.RundeckNotifier.RundeckDescriptor;
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.recipes.LocalData;
-import org.rundeck.api.RundeckClient;
 
 /**
  * Test the backward compatibility of {@link RundeckNotifier}
@@ -41,49 +40,7 @@ public class RundeckNotifierBackwardCompatibilityTest extends HudsonTestCase {
         assertEquals(500, descriptor.getRundeckJobCacheConfig().getMaximumSize());
         assertEquals(200, descriptor.getRundeckJobCacheConfig().getCacheStatsDisplayHitThreshold());
     }
-
-    @LocalData
-    public void test_GivenADescriptorConfigWithoutRundeckInstance_WhenInstanciatingDescriptorAndSavingIt_ThenPersistedConfigIsUpdated() throws Exception {
-        RundeckDescriptor descriptor = (RundeckDescriptor) this.jenkins.getDescriptorOrDie(RundeckNotifier.class);
-
-        String oldStoredConfig = FileUtils.readFileToString(new File(this.jenkins.getRootDir(), descriptor.getId() + ".xml"));
-
-        descriptor.save();
-
-        String storedConfig = FileUtils.readFileToString(new File(this.jenkins.getRootDir(), descriptor.getId() + ".xml"));
-
-        assertFalse(oldStoredConfig.equals(storedConfig));
-
-        Secret password = Secret.fromString("password");
-
-        final String expected = "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                "<org.jenkinsci.plugins.rundeck.RundeckNotifier_-RundeckDescriptor>\n" +
-                "  <rundeckInstances class=\"linked-hash-map\">\n" +
-                "    <entry>\n" +
-                "      <string>Default</string>\n" +
-                "      <org.jenkinsci.plugins.rundeck.RundeckInstance>\n" +
-                "        <url>http://rundeck.org</url>\n" +
-                "        <apiVersion>9</apiVersion>\n" +
-                "        <login>login</login>\n" +
-                "        <password>"+password.getEncryptedValue()+"</password>\n" +
-                "        <sslHostnameVerifyAllowAll>false</sslHostnameVerifyAllowAll>\n" +
-                "        <sslCertificateTrustAllowSelfSigned>false</sslCertificateTrustAllowSelfSigned>\n" +
-                "        <systemProxyEnabled>false</systemProxyEnabled>\n" +
-                "        <useIntermediateStreamFile>false</useIntermediateStreamFile>\n" +
-                "      </org.jenkinsci.plugins.rundeck.RundeckInstance>\n" +
-                "    </entry>\n" +
-                "  </rundeckInstances>\n" +
-                "  <rundeckJobCacheConfig>\n" +
-                "    <enabled>false</enabled>\n" +
-                "    <afterAccessExpirationInMinutes>1080</afterAccessExpirationInMinutes>\n" +
-                "    <maximumSize>500</maximumSize>\n" +
-                "    <cacheStatsDisplayHitThreshold>200</cacheStatsDisplayHitThreshold>\n" +
-                "  </rundeckJobCacheConfig>\n" +
-                "</org.jenkinsci.plugins.rundeck.RundeckNotifier_-RundeckDescriptor>";
-
-        assertEquals(expected, storedConfig);
-    }
-
+    
     public void test_GivenADescriptorWithMultipleRundeckInstances_WhenSavingIt_ThenPersistedConfigContainsAllInstances() throws Exception {
         RundeckDescriptor descriptor = new RundeckDescriptor();
 
@@ -101,7 +58,7 @@ public class RundeckNotifierBackwardCompatibilityTest extends HudsonTestCase {
 
         String storedConfig = FileUtils.readFileToString(new File(this.jenkins.getRootDir(), descriptor.getId() + ".xml"));
 
-        final String expected = "<?xml version='1.0' encoding='UTF-8'?>\n" +
+        final String expected = "<?xml version='1.1' encoding='UTF-8'?>\n" +
                 "<org.jenkinsci.plugins.rundeck.RundeckNotifier_-RundeckDescriptor>\n" +
                 "  <rundeckInstances class=\"linked-hash-map\">\n" +
                 "    <entry>\n" +
@@ -163,7 +120,7 @@ public class RundeckNotifierBackwardCompatibilityTest extends HudsonTestCase {
 
         String storedConfig = FileUtils.readFileToString(job.getConfigFile().getFile());
 
-        String expected = "<?xml version='1.0' encoding='UTF-8'?>\n" +
+        String expected = "<?xml version='1.1' encoding='UTF-8'?>\n" +
                 "<project>\n" +
                 "  <actions/>\n" +
                 "  <description></description>\n" +

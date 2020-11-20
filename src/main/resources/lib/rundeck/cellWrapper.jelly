@@ -1,0 +1,19 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:d="jelly:define" xmlns:st="jelly:stapler">
+  <!-- TODO remove and switch to div after baseline is 2.264 or newer -->
+  <st:documentation>
+    <st:attribute name="style"/>
+  </st:documentation>
+  <j:choose>
+    <j:when test="${divBasedFormLayout}">
+      <div style="${attrs.style}">
+        <d:invokeBody/>
+      </div>
+    </j:when>
+    <j:otherwise>
+      <td style="${attrs.style}">
+        <d:invokeBody/>
+      </td>
+    </j:otherwise>
+  </j:choose>
+</j:jelly>

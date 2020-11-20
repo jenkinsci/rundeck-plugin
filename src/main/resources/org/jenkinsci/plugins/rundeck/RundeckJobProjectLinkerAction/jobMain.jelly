@@ -1,19 +1,20 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <table style="margin-top: 1em; margin-left:1em;">
-    <tr>
-      <td>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:r="/lib/rundeck">
+  <r:blockWrapper style="margin-top: 1em; margin-left:1em;">
+    <r:rowWrapper>
+      <r:cellWrapper>
         <a href="${it.urlName}">
           <img src="${rootURL}/plugin/rundeck/images/rundeck_48x48.png" height="48" width="48" style="margin-right:1em" />
         </a>
-      </td>
-      <td style="vertical-align:middle">
+      </r:cellWrapper>
+      <r:cellWrapper style="vertical-align:middle">
         Associated <a href="http://rundeck.org/">Rundeck</a> Job:
         <a href="${it.urlName}">[${it.rundeckJob.project}] ${it.rundeckJob.fullName}</a>
         (Instance: ${it.instanceName})
         <br />
         <em>${it.rundeckJob.description}</em>
-      </td>
-    </tr>
-  </table>
+      </r:cellWrapper>
+    </r:rowWrapper>
+  </r:blockWrapper>
 </j:jelly>

@@ -43,7 +43,9 @@ public class RundeckTrigger extends Trigger<AbstractProject<?, ?>> {
      */
     public void onNotification(RundeckExecution execution) {
         if (shouldScheduleBuild(execution)) {
-            job.scheduleBuild(new RundeckCause(execution));
+            if (job != null) {
+                job.scheduleBuild(new RundeckCause(execution));
+            }
         }
     }
 

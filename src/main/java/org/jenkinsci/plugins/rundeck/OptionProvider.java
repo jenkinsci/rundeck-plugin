@@ -62,8 +62,7 @@ public class OptionProvider {
 
         List<Option> options = new ArrayList<OptionProvider.Option>();
         for (Artifact artifact : build.getArtifacts()) {
-            if (artifactPattern == null
-                || (artifactPattern != null && artifactPattern.matcher(artifact.getFileName()).matches())) {
+            if (artifactPattern == null || artifactPattern.matcher(artifact.getFileName()).matches()) {
                 options.add(new Option(artifact.getFileName(), buildArtifactUrl(build, artifact)));
             }
         }

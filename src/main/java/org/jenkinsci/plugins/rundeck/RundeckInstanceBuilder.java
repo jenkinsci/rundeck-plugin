@@ -39,7 +39,7 @@ public class RundeckInstanceBuilder {
 
         String apiVersionLoaded = this.getApiVersion(client);
         if(apiVersionLoaded!=null && !apiVersionLoaded.isEmpty()){
-            this.apiVersion = Integer.valueOf(apiVersionLoaded);
+            this.apiVersion = Integer.parseInt(apiVersionLoaded);
         }else{
             this.apiVersion = RundeckClient.API_VERSION;
         }

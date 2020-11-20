@@ -487,7 +487,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
     }
 
     public String[] getTags() {
-        return tags;
+        return Arrays.copyOf(tags, tags.length);
     }
 
     public Boolean getShouldWaitForRundeckJob() {
@@ -822,7 +822,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
 
             String userLogin=client.getLogin();
 
-            if(userLogin==null && token!=null){
+            if(userLogin == null){
                 userLogin="Authenticate by Token";
             }
 

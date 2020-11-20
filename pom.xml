@@ -4,29 +4,31 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>3.2</version>
+        <version>4.13</version>
     </parent>
 
     <artifactId>rundeck</artifactId>
-    <version>3.6.8-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>
 
     <name>Jenkins Rundeck plugin</name>
     <description>Jenkins plugin for Rundeck integration : trigger, notifier and option provider.</description>
-    <url>http://wiki.jenkins-ci.org/display/JENKINS/RunDeck+Plugin</url>
+    <url>https://github.com/jenkinsci/rundeck-plugin</url>
     <scm>
-        <url>https://github.com/jenkinsci/rundeck-plugin</url>
-        <connection>scm:git:git://github.com/jenkinsci/rundeck-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:jenkinsci/rundeck-plugin.git</developerConnection>
-      <tag>HEAD</tag>
+        <url>https://github.com/${gitHubRepo}</url>
+        <connection>scm:git:git://github.com/${gitHubRepo}.git</connection>
+        <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
+      <tag>${scmTag}</tag>
   </scm>
 
     <properties>
-        <jenkins.version>1.625.3</jenkins.version>
-        <java.level>7</java.level>
+        <revision>3.6.8</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <gitHubRepo>jenkinsci/rundeck-plugin</gitHubRepo>
+        <jenkins.version>2.222.4</jenkins.version>
+        <java.level>8</java.level>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- TODO: remove once FindBugs is fixed -->
-        <findbugs.failOnError>false</findbugs.failOnError>
+        <hpi.compatibleSinceVersion>2.0</hpi.compatibleSinceVersion>
     </properties>
 
     <developers>
@@ -44,14 +46,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.jenkins-ci.tools</groupId>
-                <artifactId>maven-hpi-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <compatibleSinceVersion>2.0</compatibleSinceVersion>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
@@ -61,25 +55,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19</version>
                 <configuration>
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks>
                 </configuration>
-            </plugin>
-            <!-- work-around for INFRA-588 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.6</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.wagon</groupId>
-                        <artifactId>wagon-http</artifactId>
-                        <version>2.10</version>
-                        <type>jar</type>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -156,6 +135,18 @@
         </pluginManagement>
     </build>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.jenkins.tools.bom</groupId>
+                <artifactId>bom-2.222.x</artifactId>
+                <version>18</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.rundeck</groupId>
@@ -182,7 +173,6 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -204,7 +194,6 @@
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>ssh-credentials</artifactId>
-            <version>1.11</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -1,19 +1,20 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:r="/lib/rundeck">
   <f:section title="Rundeck">
     <f:entry title="Job cache" description="Rundeck job cache configuration">
-      <table width="100%">
+      <r:blockWrapper>
         <f:block>
           <f:optionalBlock name="rundeckJobCacheEnabled" title="Enable Rundeck job cache" checked="${descriptor.rundeckJobCacheConfig.enabled}">
             <f:validateButton title="Cache statistics" method="displayCacheStatistics" with=""/>
             <f:validateButton title="Invalidate cache" method="invalidateCache" with=""/>
           </f:optionalBlock>
         </f:block>
-      </table>
+      </r:blockWrapper>
     </f:entry>
     <f:entry title="Instances" description="List of Rundeck instances">
       <f:repeatable var="inst" items="${descriptor.rundeckInstances}" add="Add Rundeck">
-        <table width="100%">
+        <r:blockWrapper>
             <f:entry title="Name">
               <f:textbox name="rundeck.name" value="${inst.getKey()}" clazz="required" />
             </f:entry>
@@ -39,7 +40,7 @@
                 <f:repeatableDeleteButton value="Delete Rundeck"/>
               </div>
             </f:entry>
-        </table>
+        </r:blockWrapper>
       </f:repeatable>
     </f:entry>
   </f:section>

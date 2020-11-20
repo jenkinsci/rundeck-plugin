@@ -1,7 +1,7 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form" xmlns:r="/lib/rundeck">
   <f:nested>
-    <table style="width:100%">
+    <r:blockWrapper>
       <f:radioBlock title="Build for a notification from any Rundeck job" name="filterJobs"
                     value="false" checked="${!instance.getFilterJobs()}"
                     help="${descriptor.getHelpFile('noFilterJobs')}" />
@@ -10,7 +10,7 @@
                     help="${descriptor.getHelpFile('filterJobs')}">
         <f:nested>
           <f:repeatable items="${instance.jobsIdentifiers}" var="jobsIdentifiers" minimum="1" noAddButton="true">
-            <table style="width:100%">
+            <r:blockWrapper>
               <f:entry title="Rundeck Job Identifier : "
                        help="/descriptor/org.jenkinsci.plugins.rundeck.RundeckTrigger/help/identifier">
                 <f:textbox name="value" value="${jobsIdentifiers}" />
@@ -19,7 +19,7 @@
                   <f:repeatableDeleteButton />
                 </div>
               </f:entry>
-            </table>
+            </r:blockWrapper>
           </f:repeatable>
         </f:nested>
       </f:radioBlock>
@@ -29,6 +29,6 @@
         <f:checkbox name="executionStatuses" title="FAILED" json="FAILED" checked="${instance.executionStatuses.contains('FAILED')}" /><st:nbsp/>
         <f:checkbox name="executionStatuses" title="ABORTED" json="ABORTED" checked="${instance.executionStatuses.contains('ABORTED')}" /><st:nbsp/>
       </f:entry>
-    </table>
+    </r:blockWrapper>
   </f:nested>
 </j:jelly>

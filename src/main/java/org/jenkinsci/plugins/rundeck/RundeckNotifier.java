@@ -512,7 +512,6 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
 
     /**
      * optional non default rundeck user for actual job
-     * @return
      */
     public String getJobUser() {
         return jobUser;
@@ -771,12 +770,6 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
 
         /**
          * check valid job
-         * @param jobIdentifier
-         * @param rundeckInstance
-         * @param user
-         * @param password
-         * @param token
-         * @return
          */
         @RequirePOST
         public FormValidation doCheckJobIdentifier(@QueryParameter("jobIdentifier") final String jobIdentifier,

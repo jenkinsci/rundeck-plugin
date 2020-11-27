@@ -32,9 +32,6 @@ public class RunDeckLogTail implements Iterable<List<RundeckOutputEntry>> {
 
     /**
      * Standard constructor that contains sensible defaults for handling the API calls correctly.
-     * 
-     * @param rundeckClient
-     * @param executionId
      */
     public RunDeckLogTail(RundeckClient rundeckClient, Long executionId) {
         this(rundeckClient, executionId, 50, 5, 15000L, 5000L, 2000L);
@@ -86,7 +83,8 @@ public class RunDeckLogTail implements Iterable<List<RundeckOutputEntry>> {
          * This will clear and update the result set for the @link {@link #next()} call using the RunDeck Client to perform an API call, it will also update the
          * offset and last modification date for the next API call. If there are no changes since the last call, this method will sleep for 5 seconds. If there
          * are changes, it will sleep for 2 seconds so it won't overload the API. Once the API call returns with 'completed' the next call to this method will
-         * return false.</br> If for some reason the sleep is interrupted, the next call to this method will return false.</br>
+         * return false.<br> 
+         * If for some reason the sleep is interrupted, the next call to this method will return false.
          */
         public boolean hasNext() {
 

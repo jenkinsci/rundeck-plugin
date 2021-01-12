@@ -1,15 +1,15 @@
 # Jenkins Rundeck plugin
 
 This plugin is a Notifier that will talk to a
-[RunDeck](http://www.rundeck.org/) instance (via its HTTP API) to
-schedule a job execution on RunDeck after a successful build on
+[Rundeck](http://www.rundeck.org/) instance (via its HTTP API) to
+schedule a job execution on Rundeck after a successful build on
 Jenkins.  
 It is also a Trigger that will schedule a build on Jenkins after a job
-execution on RunDeck (using RunDeck WebHook Notification).  
+execution on Rundeck (using Rundeck WebHook Notification).  
 In addition, it turns Jenkins into an [Option
 provider](https://docs.rundeck.com/docs/tutorials/option-provider.html)
-for RunDeck, if you want to use your Jenkins build artifacts as an
-option to a RunDeck job.
+for Rundeck, if you want to use your Jenkins build artifacts as an
+option to a Rundeck job.
 
 ![](docs/images/logo-rundeck.png)
 
@@ -17,7 +17,7 @@ option to a RunDeck job.
 
 ## Use
 
-[RunDeck](https://www.rundeck.com/open-source) is an open-source tool for automating
+[Rundeck](https://www.rundeck.com/open-source) is an open-source tool for automating
 tasks on multiple nodes, with both a CLI and a web-based interface. You
 can use it to deploy your application to multiple nodes/appserv easily.
 It has a concept of jobs and build similar to Jenkins.
@@ -26,21 +26,21 @@ You have 3 ways to use this plugin :
 
 -   build a "**deployment pipeline**", (the "0-click deployment
     process") : you commit a change, Jenkins picks it up, build, test
-    and so on, and then triggers a job execution on RunDeck for
+    and so on, and then triggers a job execution on Rundeck for
     deploying your application. This requires some configuration on
     Jenkins (both global configuration and job configuration), to link a
-    Jenkins job with a RunDeck job.
--   continue your pipeline after the deployment : RunDeck deploys your
+    Jenkins job with a Rundeck job.
+-   continue your pipeline after the deployment : Rundeck deploys your
     application, then triggers a build on Jenkins to run some
     integration tests (Selenium ?). This requires some configuration on
-    RunDeck (WebHook notification) and on Jenkins (Trigger
+    Rundeck (WebHook notification) and on Jenkins (Trigger
     configuration, and optionally filter the notifications from
-    RunDeck).
+    Rundeck).
 -   use Jenkins as an [**Option
     provider**](https://docs.rundeck.com/docs/tutorials/option-provider.html)
-    for RunDeck : when you execute a RunDeck job, you can have an
+    for Rundeck : when you execute a Rundeck job, you can have an
     (input) option, whose values could be retrieve from an external
-    system (here, Jenkins). So you can have a RunDeck-job that use a
+    system (here, Jenkins). So you can have a Rundeck-job that use a
     Jenkins-artifact (from a Jenkins-build) as an input.
 
 Note that you can combine those use-cases.
@@ -49,14 +49,14 @@ Note that you can combine those use-cases.
 
 The goal is to have a **0-click deployment process** : you commit a
 change, Jenkins picks it up, build, test and so on, and then triggers a
-job execution on RunDeck for deploying your application.  
+job execution on Rundeck for deploying your application.  
 You can also have an "on-demand" process : configure a "tag" in the job
-configuration (see below), and the plugin will only notify RunDeck if
+configuration (see below), and the plugin will only notify Rundeck if
 the tag is present in the SCM changelog (= in the commit message).
 
 #### Configuration
 
-First, you need to configure your RunDeck instance on the main Jenkins
+First, you need to configure your Rundeck instance on the main Jenkins
 configuration page :  
 ![](docs/images/jenkins-config.png)
 
@@ -65,14 +65,14 @@ of Login/Password.  Additionally you can set the API version if you need
 to use a lower number than the latest version.
 
 You can use the "Test Connection" button to make sure that Jenkins can
-talk to your RunDeck instance :
+talk to your Rundeck instance :
 
 |                                                                                                                                                 |                                                                                                                                                |
 |-------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
 | ![](docs/images/jenkins-config-validation-nok.png) | ![](docs/images/jenkins-config-validation-ok.png) |
 | *Error message in case of error*                                                                                                                | *Success message when your credentials are valid*                                                                                              |
 
-Then, for each Jenkins job, configure the target RunDeck job that should
+Then, for each Jenkins job, configure the target Rundeck job that should
 be executed, along with its options :
 
 |                                                                                                                              |                                                                                                                                    |
@@ -82,44 +82,44 @@ be executed, along with its options :
 
 -   Note that the "options" should be expressed in the java-properties
     format, and that Jenkins environment variables are expanded when
-    making the RunDeck API calls (for more details, read the
+    making the Rundeck API calls (for more details, read the
     integrated-help in your Jenkins instance by clicking the "?" icon
     next to the "options" field).
 -   The "tag" field is used to perform "on-demand" job scheduling on
-    RunDeck : if the value is not empty, we will check if the SCM
+    Rundeck : if the value is not empty, we will check if the SCM
     changelog (= the commit message) contains the given tag, and only
     schedule a job execution if it is present. For example you can set
     the value to "\#deploy". Note that if this value is left empty, we
     will ALWAYS schedule a job execution.
--   You can choose to wait for the RunDeck job to finish before
+-   You can choose to wait for the Rundeck job to finish before
     finishing the Jenkins build. Otherwise, the default behavior is to
-    trigger a RunDeck job, and finish the Jenkins build (usually before
-    the RunDeck job has ended).
+    trigger a Rundeck job, and finish the Jenkins build (usually before
+    the Rundeck job has ended).
 -   If the last checkbox is checked, then a failure to schedule the job
-    execution on RunDeck will fail the Jenkins build. Otherwise, the
-    RunDeck integration won't interact with the result of your Jenkins
-    build (even if RunDeck is down).
+    execution on Rundeck will fail the Jenkins build. Otherwise, the
+    Rundeck integration won't interact with the result of your Jenkins
+    build (even if Rundeck is down).
 
 ### Post-deployment job
 
 The goal is to continue the deployment pipeline after a successful
-deployment : RunDeck deploys your application, and triggers a build on
+deployment : Rundeck deploys your application, and triggers a build on
 Jenkins to run some integration tests (using Selenium for example).
 
 #### Configuration
 
 First, you need to configure the [WebHook
 Notification](https://docs.rundeck.com/docs/manual/notifications/webhooks.html#job-notifications) in
-your RunDeck jobs. Set it to the url
+your Rundeck jobs. Set it to the url
 [https://JENKINS\_HOST/plugin/rundeck/webhook/](https://jenkins_host/plugin/rundeck/webhook/).
 
-Then, configure the "RunDeck Trigger" on your Jenkins jobs : activate
-it, and optionally filter the notifications from RunDeck.
+Then, configure the "Rundeck Trigger" on your Jenkins jobs : activate
+it, and optionally filter the notifications from Rundeck.
 
 #### Use
 
-If your Jenkins job is started by a RunDeck notification, you can access
-the data of the RunDeck notification as environment variables :
+If your Jenkins job is started by a Rundeck notification, you can access
+the data of the Rundeck notification as environment variables :
 
 -   **RDECK\_JOB\_ID** : the ID (UUID) of the job
 -   **RDECK\_JOB\_NAME** : the name of the job
@@ -143,7 +143,7 @@ the data of the RunDeck notification as environment variables :
     human-readable string ("3 minutes 34 seconds")
 -   **RDECK\_EXEC\_SHORT\_DURATION** : the duration of the execution, as
     a short human-readable string ("0:03:34.187")
--   **RDECK\_EXEC\_URL** : the url of the execution (on the RunDeck Web
+-   **RDECK\_EXEC\_URL** : the url of the execution (on the Rundeck Web
     GUI)
 -   **RDECK\_EXEC\_DESCRIPTION** : the description of the execution
 -   **RDECK\_EXEC\_ARG\_\[NAME\]** : the value of a Job option passed to
@@ -153,8 +153,8 @@ the data of the RunDeck notification as environment variables :
 
 Using Jenkins as an [Option
 provider](https://docs.rundeck.com/docs/tutorials/option-provider.html)
-for RunDeck is very easy, because you don't need to configure anything
-on the Jenkins side. You just need to point your RunDeck option "remote
+for Rundeck is very easy, because you don't need to configure anything
+on the Jenkins side. You just need to point your Rundeck option "remote
 url" to one of the following url :
 
 #### Option Provider for artifacts
@@ -162,7 +162,7 @@ url" to one of the following url :
 List all artifacts for a given project / build, with a reference to the
 absolute url of the artifact. Useful if you have multiple artifacts to
 deploy (one per architecture for example).  
-Example (RunDeck screen when executing a job with an "artifact" option,
+Example (Rundeck screen when executing a job with an "artifact" option,
 taking its values from Jenkins) :  
 ![](docs/images/option-provider-artifact.png)
 
@@ -186,7 +186,7 @@ List all builds (versions) for a given project / artifact, with a
 reference to the absolute url of the artifact. Useful if you have only 1
 main artifact, but want to easily re-deploy an older version of the
 artifact.  
-Example (RunDeck screen when executing a job with a "build" option,
+Example (Rundeck screen when executing a job with a "build" option,
 taking its values from Jenkins) :  
 ![](docs/images/option-provider-build.png)
 
@@ -216,7 +216,7 @@ documentation: <https://wiki.jenkins-ci.org/display/JENKINS/Matrix-based+securit
 
 ## Compatibility Matrix
 
-This plugin is not compatible with all versions of RunDeck
+This plugin is not compatible with all versions of Rundeck
 
 If you are using Plugin version 3.x and need to access an older Rundeck
 server, you can set the API version in the plugin settings.
@@ -228,10 +228,10 @@ You can find older versions of the plugin here :
 
 #### Known Issues
 
--   If you have invalid links to RunDeck executions, check your RunDeck
+-   If you have invalid links to Rundeck executions, check your Rundeck
     configuration : fix the property "grails.serverURL" in the file
     $RDECK\_HOME/server/config/rundeck-config.properties.
--   With the versions 1.x of the plugin, you can't have RunDeck jobs
+-   With the versions 1.x of the plugin, you can't have Rundeck jobs
     with the same groupPath/jobName on multiple projects.
 -   Remote options getting 400 server error from Jenkins probably mean
     you need to grant anonymous access to Discover and Read the Jenkins

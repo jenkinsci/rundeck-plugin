@@ -105,6 +105,12 @@ public class RundeckClientManager implements RundeckManager {
             this.value = value;
         }
 
+		@Override
+		public String toString() {
+			return value;
+		}
+            
+
     }
 
     @Override

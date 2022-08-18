@@ -2,17 +2,20 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:r="/lib/rundeck">
   <f:section title="Rundeck">
-    <f:entry title="Job cache" description="Rundeck job cache configuration">
-      <r:blockWrapper>
-        <f:block>
-          <f:optionalBlock name="rundeckJobCacheEnabled" title="Enable Rundeck job cache" checked="${descriptor.rundeckJobCacheConfig.enabled}">
-            <f:validateButton title="Cache statistics" method="displayCacheStatistics" with=""/>
-            <f:validateButton title="Invalidate cache" method="invalidateCache" with=""/>
-          </f:optionalBlock>
-        </f:block>
-      </r:blockWrapper>
-    </f:entry>
-    <f:entry title="Instances" description="List of Rundeck instances">
+      <f:entry title="Job cache" description="Rundeck job cache configuration">
+          <r:blockWrapper>
+              <f:block>
+                  <f:optionalBlock name="rundeckJobCacheEnabled" title="Enable Rundeck job cache" checked="${descriptor.rundeckJobCacheConfig.enabled}">
+                      <f:validateButton title="Cache statistics" method="displayCacheStatistics" with=""/>
+                      <f:validateButton title="Invalidate cache" method="invalidateCache" with=""/>
+                  </f:optionalBlock>
+              </f:block>
+          </r:blockWrapper>
+      </f:entry>
+      <f:entry title="SSL">
+          <f:checkbox field="allowSelfSignedSSL" title="Allow self signed certificates." />
+      </f:entry>
+      <f:entry title="Instances" description="List of Rundeck instances">
       <f:repeatable var="inst" items="${descriptor.rundeckInstances}" add="Add Rundeck">
         <r:blockWrapper>
             <f:entry title="Name">
@@ -34,7 +37,7 @@
               <f:textbox name="rundeck.apiversion" value="${descriptor.getApiVersion(inst.getValue())}" />
             </f:entry>
             <f:validateButton title="Test Connection" progress="Testing..." method="testConnection"
-              with="rundeck.url,rundeck.login,rundeck.password,rundeck.authtoken,rundeck.apiversion" />
+              with="rundeck.url,rundeck.login,rundeck.password,rundeck.authtoken,rundeck.apiversion,allowSelfSignedSSL" />
             <f:entry title="">
               <div align="right">
                 <f:repeatableDeleteButton value="Delete Rundeck"/>

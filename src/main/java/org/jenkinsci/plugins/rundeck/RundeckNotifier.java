@@ -546,6 +546,8 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
         @CopyOnWrite
         private volatile Map<String, RundeckInstance> rundeckInstances = new LinkedHashMap<>();
 
+        private volatile boolean allowSelfSignedSSL = false;
+
         private volatile transient RundeckJobCache rundeckJobCache = new DummyRundeckJobCache();
 
         private volatile RundeckJobCacheConfig rundeckJobCacheConfig = RundeckJobCacheConfig.initializeWithDefaultValues();
@@ -585,7 +587,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
         protected Object readResolve() {
             if (rundeckInstance != null) {
                 Map<String, RundeckInstance> instance = new LinkedHashMap<String, RundeckInstance>();
-                instance.put("Default", RundeckInstance.builder().client(rundeckInstance).build());
+                instance.put("Default", RundeckInstance.builder().allowSelfSignedSSL(this.allowSelfSignedSSL).client(rundeckInstance).build());
                 this.setRundeckInstances(instance);
             }
             return this;
@@ -615,6 +617,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
             }
 
             Map<String, RundeckInstance> newInstances = new LinkedHashMap<String, RundeckInstance>(instances.size());
+            this.setAllowSelfSignedSSL(json.getBoolean("allowSelfSignedSSL"));
 
             try {
                 for (int i=0; i< instances.size(); i++) {
@@ -622,7 +625,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
 
                     if (!StringUtils.isEmpty(instance.getString("name"))) {
                         RundeckInstanceBuilder builder = RundeckInstance.builder();
-                        builder.url(instance.getString("url"));
+                        builder.url(instance.getString("url")).allowSelfSignedSSL(this.allowSelfSignedSSL);
                         if (instance.get("authtoken") != null && !"".equals(instance.getString("authtoken"))) {
                             builder.token(Secret.fromString(instance.getString("authtoken")) );
                         } else {
@@ -722,12 +725,13 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
                                                @QueryParameter("rundeck.login") final String login,
                                                @QueryParameter("rundeck.password") final Secret password,
                                                @QueryParameter("rundeck.authtoken") final Secret token,
+                                               @QueryParameter("allowSelfSignedSSL") final boolean allowSelfSignedSSL,
                                                @QueryParameter(value = "rundeck.apiversion", fixEmpty = true) final Integer apiversion) {
 
 
             Jenkins.getInstance().checkPermission(Jenkins.ADMINISTER);
 
-            RundeckInstanceBuilder builder = new RundeckInstanceBuilder().url(url);
+            RundeckInstanceBuilder builder = new RundeckInstanceBuilder().url(url).allowSelfSignedSSL(allowSelfSignedSSL);
 
             if (null != apiversion && apiversion > 0) {
                 builder.version(apiversion);
@@ -935,7 +939,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
 
             RundeckManager client;
             if(rundeckBuilder==null) {
-                rundeckBuilder = new RundeckInstanceBuilder();
+                rundeckBuilder = new RundeckInstanceBuilder();//.allowSelfSignedSSL(true);
             }
 
             if(rundeckBuilder.getClient()==null){
@@ -987,6 +991,14 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
 
         public void setRundeckInstances(Map<String, RundeckInstance> instances) {
             this.rundeckInstances = instances;
+        }
+
+        public boolean getAllowSelfSignedSSL() {
+            return allowSelfSignedSSL;
+        }
+
+        public void setAllowSelfSignedSSL(boolean allowSelfSignedSSL) {
+            this.allowSelfSignedSSL = allowSelfSignedSSL;
         }
 
         public RundeckJobCacheConfig getRundeckJobCacheConfig() {

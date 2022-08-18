@@ -11,6 +11,7 @@ public class RundeckInstanceBuilder {
     private Secret token;
     private Secret password;
     RundeckManager client;
+    private boolean allowSelfSignedSSL;
 
     public RundeckInstanceBuilder() {
     }
@@ -76,6 +77,11 @@ public class RundeckInstanceBuilder {
         return this;
     }
 
+    RundeckInstanceBuilder allowSelfSignedSSL(boolean allowSelfSignedSSL){
+        this.allowSelfSignedSSL = allowSelfSignedSSL;
+        return this;
+    }
+
     public RundeckInstance build() {
         RundeckInstance client = new RundeckInstance();
         client.setUrl(this.url);
@@ -83,6 +89,7 @@ public class RundeckInstanceBuilder {
         client.setLogin(this.login);
         client.setPassword(this.password);
         client.setToken(this.token);
+        client.setSslCertificateTrustAllowSelfSigned(this.allowSelfSignedSSL);
 
         return client;
     }

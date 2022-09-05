@@ -12,7 +12,7 @@
               </f:block>
           </r:blockWrapper>
       </f:entry>
-      <f:entry title="SSL">
+      <f:entry title="SSL" description="This should be used for testing ONLY.">
           <f:checkbox field="allowSelfSignedSSL" title="Allow self signed certificates." />
       </f:entry>
       <f:entry title="Instances" description="List of Rundeck instances">

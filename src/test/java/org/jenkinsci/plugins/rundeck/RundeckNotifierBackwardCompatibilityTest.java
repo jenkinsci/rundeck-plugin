@@ -72,6 +72,7 @@ public class RundeckNotifierBackwardCompatibilityTest extends HudsonTestCase {
                 "      </org.jenkinsci.plugins.rundeck.RundeckInstance>\n" +
                 "    </entry>\n" +
                 "  </rundeckInstances>\n" +
+                "  <allowSelfSignedSSL>false</allowSelfSignedSSL>\n" +
                 "  <rundeckJobCacheConfig>\n" +
                 "    <enabled>false</enabled>\n" +
                 "    <afterAccessExpirationInMinutes>1080</afterAccessExpirationInMinutes>\n" +

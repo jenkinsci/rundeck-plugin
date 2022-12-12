@@ -117,7 +117,8 @@ public class RunDeckLogTail implements Iterable<List<ExecLog>> {
                             maxRetries, e });
                     sleepOrThrowException(e);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.log(Level.SEVERE, "Rundeck Exception:", e);
+                    //e.printStackTrace();
                 }
             } catch (InterruptedException e) {
                 log.warning("Caught InterruptedException, will set completed to 'true'.");

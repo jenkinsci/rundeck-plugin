@@ -51,21 +51,24 @@ public class RundeckClientManager implements RundeckManager {
         if(client == null){
             RundeckClient.Builder builder = RundeckClient.builder().baseUrl(rundeckInstance.getUrl());
 
-            if(rundeckInstance.getToken()!=null && !rundeckInstance.getToken().getPlainText().isEmpty()){
-                builder.tokenAuth(rundeckInstance.getToken().getPlainText());
-            }
-            if(rundeckInstance.getLogin() != null && rundeckInstance.getPassword()!=null){
-                builder.passwordAuth(rundeckInstance.getLogin(),rundeckInstance.getPassword().getPlainText() );
-            }
-
+            // shared client configuration
             if(rundeckInstance.getApiVersion()!=null){
                 builder.apiVersion(rundeckInstance.getApiVersion());
             }
-
             if(rundeckInstance.isSslCertificateTrustAllowSelfSigned()){
                 builder.insecureSSL(true);
             }
 
+            // Authentication: EITHER token OR username+password
+            if(rundeckInstance.getToken()!=null && !rundeckInstance.getToken().getPlainText().isEmpty()){
+                builder.tokenAuth(rundeckInstance.getToken().getPlainText());
+            } else if(rundeckInstance.getLogin() != null && rundeckInstance.getPassword()!=null){
+                builder.passwordAuth(rundeckInstance.getLogin(),rundeckInstance.getPassword().getPlainText() );
+            } else {
+                throw new RuntimeException("No Rundeck authentication method provided");
+            }
+
+            // Build the Rundeck Client object
             client = builder.build();
         }
 

@@ -10,6 +10,7 @@ import org.rundeck.client.api.model.scheduler.ScheduledJobItem;
 import org.rundeck.client.util.Client;
 import retrofit2.Call;
 import retrofit2.Response;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ public class RundeckClientManager implements RundeckManager {
             if(rundeckInstance.getToken()!=null && !rundeckInstance.getToken().getPlainText().isEmpty()){
                 builder.tokenAuth(rundeckInstance.getToken().getPlainText());
             }
-            if(rundeckInstance.getLogin() != null && rundeckInstance.getPassword()!=null){
+            if(!StringUtils.isEmpty(rundeckInstance.getLogin()) && !StringUtils.isEmpty(rundeckInstance.getPassword().getPlainText())){
                 builder.passwordAuth(rundeckInstance.getLogin(),rundeckInstance.getPassword().getPlainText() );
             }
 

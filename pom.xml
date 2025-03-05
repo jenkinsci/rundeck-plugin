@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>4.24</version>
-        <relativePath />
+        <version>4.51</version>
+        <relativePath/>
     </parent>
 
     <artifactId>rundeck</artifactId>
@@ -19,18 +20,15 @@
         <url>https://github.com/${gitHubRepo}</url>
         <connection>scm:git:git://github.com/${gitHubRepo}.git</connection>
         <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
-      <tag>${scmTag}</tag>
-  </scm>
+        <tag>${scmTag}</tag>
+    </scm>
 
     <properties>
         <revision>3.6.14</revision>
         <changelist>-SNAPSHOT</changelist>
         <gitHubRepo>jenkinsci/rundeck-plugin</gitHubRepo>
-        <jenkins.version>2.235.1</jenkins.version>
-        <java.level>8</java.level>
-        <mockito.version>3.2.4</mockito.version>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <jenkins.version>2.440.3</jenkins.version>
+        <mockito.version>4.3.0</mockito.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hpi.compatibleSinceVersion>2.0</hpi.compatibleSinceVersion>
     </properties>
@@ -87,16 +85,26 @@
         <dependencies>
             <dependency>
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.222.x</artifactId>
-                <version>887.vae9c8ac09ff7</version>
-                <scope>import</scope>
+                <artifactId>bom-2.440.x</artifactId>
+                <version>3387.v0f2773fa_3200</version>
                 <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <!-- Upper bounds between JTH and Xalan serializer which contains older version -->
             <dependency>
                 <groupId>xml-apis</groupId>
                 <artifactId>xml-apis</artifactId>
                 <version>1.4.01</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>4.11.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>1.6.20</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -109,12 +117,12 @@
             <version>2.1.3</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.rundeck.api</groupId>
             <artifactId>rd-api-client</artifactId>
-            <version>1.3.3</version>
+            <version>2.0.8</version>
         </dependency>
+
         <!-- overwrite the xalan version of rundeck api by the version used in jenkins -->
         <dependency>
             <groupId>xalan</groupId>
@@ -260,7 +268,7 @@
                 <artifactId>maven-hpi-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <minimumJavaVersion />
+                    <minimumJavaVersion/>
                 </configuration>
             </plugin>
             <plugin>
@@ -327,7 +335,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -341,7 +349,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -357,7 +365,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -370,7 +378,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>

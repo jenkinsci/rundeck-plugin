@@ -34,7 +34,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.interceptor.RequirePOST;
 import org.rundeck.client.api.model.*;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -139,7 +139,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
     }
 
     @Override
-    public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath filePath, @Nonnull Launcher launcher, @Nonnull TaskListener listener) throws IOException {
+    public void perform(@NonNull Run<?, ?> run, @NonNull FilePath filePath, @NonNull Launcher launcher, @NonNull TaskListener listener) throws IOException {
         if (!Boolean.TRUE.equals(notifyOnAllStatus) && run.getResult() != Result.SUCCESS && run.getResult() != null) {
             return;
         }
@@ -151,7 +151,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
             throw new AbortException("Rundeck configuration is not valid !");
         }
         this.performUser = rundeckClientManager.getRundeckInstance().getLogin();
-        if(performUser==null && this.jobToken!=null){
+        if(StringUtils.isBlank(performUser)){
             this.performUser ="Authenticate By token";
         }
         try {
@@ -166,7 +166,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
         }
     }
 
-    private ChangeLogSet<? extends Entry> getChangeSet(@Nonnull Run<?, ?> run) {
+    private ChangeLogSet<? extends Entry> getChangeSet(@NonNull Run<?, ?> run) {
         if (run instanceof AbstractBuild<?,?>) {
             AbstractBuild<?,?> b = (AbstractBuild<?,?>) run;
             return b.getChangeSet();
@@ -183,7 +183,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
      * @param listener for logging the result
      * @return true if we should notify Rundeck, false otherwise
      */
-    private boolean shouldNotifyRundeck(@Nonnull Run<?, ?> build, @Nonnull TaskListener listener) {
+    private boolean shouldNotifyRundeck(@NonNull Run<?, ?> build, @NonNull TaskListener listener) {
         String info = "Instance '" + this.getRundeckInstance() + "' with rundeck user '" + this.performUser + "': Notifying Rundeck...";
 
         if (tagsList.length == 0) {
@@ -731,7 +731,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
 
             String userLogin=client.getRundeckInstance().getLogin();
 
-            if(userLogin == null){
+            if(StringUtils.isBlank(userLogin)){
                 userLogin="Authenticate by Token";
             }
 
@@ -811,7 +811,7 @@ public class RundeckNotifier extends Notifier implements SimpleBuildStep {
                 String groupPath = matcher.group(2);
                 String name = matcher.group(3);
                 try{
-                    job = rundeckClient.findJob(project, groupPath, name);
+                    job = rundeckClient.findJob(project, name, groupPath);
                 }catch (Exception e){
                     log.warning(e.getMessage());
                 }

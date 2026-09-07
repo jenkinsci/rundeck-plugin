@@ -7,3 +7,6 @@ work
 
 *.iml
 .idea/
+
+.build-certs-tmp/
+.m2-cache/

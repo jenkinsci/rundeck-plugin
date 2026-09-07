@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.rundeck;
 
-import mockit.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -15,14 +14,16 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 public class WebHookListenerTest {
     @Rule public JenkinsRule jenkins = new JenkinsRule();
 
     @Test
-    public void testInvalidEntities(){
+    public void testInvalidEntities() throws IOException {
 
         WebHookListener listener = new WebHookListener();
 
@@ -37,30 +38,18 @@ public class WebHookListenerTest {
         InputStream data = new ByteArrayInputStream(payload.getBytes(StandardCharsets.UTF_8));
         final ServletInputStream servletInputStream=new DelegatingServletInputStream(data);
 
-        listener.doIndex(
-                new MockUp<StaplerRequest>() {
-                    @Mock
-                    public ServletInputStream getInputStream(){
-                        return servletInputStream;
-                    }
-                }.getMockInstance(),
-                new MockUp<StaplerResponse>() {
-                    @Mock
-                    public void setStatus(int num){
-                        assertEquals(num, 400);
-                    }
+        StaplerRequest request = mock(StaplerRequest.class);
+        when(request.getInputStream()).thenReturn(servletInputStream);
+        StaplerResponse response = mock(StaplerResponse.class);
+        when(response.getWriter()).thenReturn(new PrintWriter(System.out));
 
-                    @Mock
-                    public PrintWriter getWriter(){
-                        return new PrintWriter(System.out);
-                    }
+        listener.doIndex(request, response);
 
-                }.getMockInstance()
-        );
+        verify(response).setStatus(400);
     }
 
     @Test
-    public void testValidData() {
+    public void testValidData() throws IOException {
 
         WebHookListener listener = new WebHookListener();
         final String payload = "{executionId: 123, status: 'success',  jobId: '6fa68fe1-6894-477c-a997-ba1004b4ae83', jobName: 'Demo', jobGroup: 'Test', project: 'Jenkins', permalink: 'http://rundeck/execution/123' }";
@@ -68,26 +57,14 @@ public class WebHookListenerTest {
         InputStream data = new ByteArrayInputStream(payload.getBytes(StandardCharsets.UTF_8));
         final ServletInputStream servletInputStream=new DelegatingServletInputStream(data);
 
-        listener.doIndex(
-                new MockUp<StaplerRequest>() {
-                    @Mock
-                    public ServletInputStream getInputStream(){
-                        return servletInputStream;
-                    }
-                }.getMockInstance(),
-                new MockUp<StaplerResponse>() {
-                    @Mock
-                    public void setStatus(int num){
-                        assertEquals(num, 200);
-                    }
+        StaplerRequest request = mock(StaplerRequest.class);
+        when(request.getInputStream()).thenReturn(servletInputStream);
+        StaplerResponse response = mock(StaplerResponse.class);
+        when(response.getWriter()).thenReturn(new PrintWriter(System.out));
 
-                    @Mock
-                    public PrintWriter getWriter(){
-                        return new PrintWriter(System.out);
-                    }
+        listener.doIndex(request, response);
 
-                }.getMockInstance()
-        );
+        verify(response).setStatus(200);
     }
 }
 

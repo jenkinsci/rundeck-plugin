@@ -17,8 +17,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class RundeckClientManager implements RundeckManager {
+
+    private static final Logger log = Logger.getLogger(RundeckClientManager.class.getName());
 
     final public static Integer API_VERSION = 32;
     private RundeckInstance rundeckInstance;
@@ -52,21 +55,24 @@ public class RundeckClientManager implements RundeckManager {
         if(client == null){
             RundeckClient.Builder builder = RundeckClient.builder().baseUrl(rundeckInstance.getUrl());
 
-            if(rundeckInstance.getToken()!=null && !rundeckInstance.getToken().getPlainText().isEmpty()){
-                builder.tokenAuth(rundeckInstance.getToken().getPlainText());
-            }
-            if(!StringUtils.isEmpty(rundeckInstance.getLogin()) && !StringUtils.isEmpty(rundeckInstance.getPassword().getPlainText())){
-                builder.passwordAuth(rundeckInstance.getLogin(),rundeckInstance.getPassword().getPlainText() );
-            }
-
+            // shared client configuration
             if(rundeckInstance.getApiVersion()!=null){
                 builder.apiVersion(rundeckInstance.getApiVersion());
             }
-
             if(rundeckInstance.isSslCertificateTrustAllowSelfSigned()){
                 builder.insecureSSL(true);
             }
 
+            // Authentication: EITHER token OR username+password
+            if(rundeckInstance.getToken()!=null && !rundeckInstance.getToken().getPlainText().isEmpty()){
+                builder.tokenAuth(rundeckInstance.getToken().getPlainText());
+            } else if(!StringUtils.isEmpty(rundeckInstance.getLogin()) && !StringUtils.isEmpty(rundeckInstance.getPassword().getPlainText())){
+                builder.passwordAuth(rundeckInstance.getLogin(),rundeckInstance.getPassword().getPlainText() );
+            } else {
+                throw new RuntimeException("No Rundeck authentication method provided");
+            }
+
+            // Build the Rundeck Client object
             client = builder.build();
         }
 
@@ -154,6 +160,8 @@ public class RundeckClientManager implements RundeckManager {
 
             return foundJob;
         }else{
+            log.warning("findJob(" + project + ", " + name + ", " + groupPath + ") failed: HTTP "
+                    + execute.code() + " " + execute.message());
             return null;
         }
     }
@@ -162,6 +170,11 @@ public class RundeckClientManager implements RundeckManager {
     public JobItem getJob(String id) throws IOException {
         Call<ScheduledJobItem>  jobCall =  client.getService().getJobInfo(id);
         Response<ScheduledJobItem> scheduledJobItemResponse = jobCall.execute();
+        if (!scheduledJobItemResponse.isSuccessful()) {
+            log.warning("getJob(" + id + ") failed: HTTP "
+                    + scheduledJobItemResponse.code() + " " + scheduledJobItemResponse.message());
+            return null;
+        }
         return scheduledJobItemResponse.body();
     }
 

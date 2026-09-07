@@ -39,6 +39,9 @@ public class RundeckJobProjectLinkerAction implements Action {
         this.rundeckInstanceName = rundeckInstanceName;
         this.rundeck = rundeck;
         this.rundeckJob = RundeckNotifier.RundeckDescriptor.findJob(rundeckJobId, rundeckInstanceName, rundeck);
+        if (rundeckJob == null) {
+            throw new IllegalArgumentException("Could not find a job with the identifier : " + rundeckJobId);
+        }
         this.rundeckJobUrl = buildRundeckJobUrl();
     }
 
